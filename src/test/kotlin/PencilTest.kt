@@ -24,4 +24,13 @@ class PencilTest {
         pencil.write(paper, "Hello!")
         assertEquals("Hello!", paper.read())
     }
+
+    @Test
+    fun `writing multiple times appends text to the paper`() {
+        val pencil = Pencil()
+        val paper = Paper()
+        pencil.write(paper, "She sells sea shells")
+        pencil.write(paper, " down by the sea shore")
+        assertEquals("She sells sea shells down by the sea shore", paper.read())
+    }
 }

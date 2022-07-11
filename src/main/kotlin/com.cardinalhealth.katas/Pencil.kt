@@ -4,7 +4,7 @@ class Paper(private var contents: String = "") {
     fun read() = contents
 
     fun write(characters: String) {
-        contents = characters
+        contents += characters
     }
 }
 
