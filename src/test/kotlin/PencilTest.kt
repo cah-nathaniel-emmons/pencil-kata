@@ -39,7 +39,7 @@ class PencilTest {
         val initialPointDurability = 10
         val pencil = Pencil(initialPointDurability)
         val paper = Paper()
-        pencil.write(paper, "A")
+        pencil.write(paper, "a")
         assertEquals(initialPointDurability - 1, pencil.pointDurability)
     }
 
@@ -48,7 +48,7 @@ class PencilTest {
         val initialPointDurability = 10
         val pencil = Pencil(initialPointDurability)
         val paper = Paper()
-        pencil.write(paper, "     A         ")
+        pencil.write(paper, "     a         ")
         assertEquals(initialPointDurability - 1, pencil.pointDurability)
     }
 
@@ -57,7 +57,7 @@ class PencilTest {
         val initialPointDurability = 10
         val pencil = Pencil(initialPointDurability)
         val paper = Paper()
-        pencil.write(paper, "\nA\n")
+        pencil.write(paper, "\na\n")
         assertEquals(initialPointDurability - 1, pencil.pointDurability)
     }
 
@@ -66,16 +66,25 @@ class PencilTest {
         val initialPointDurability = 0
         val pencil = Pencil(initialPointDurability)
         val paper = Paper()
-        pencil.write(paper, "Is this thing on?")
+        pencil.write(paper, "is this thing on?")
         assertEquals("                 ", paper.read())
     }
 
     @Test
     fun `spaces appear immediately after a pencil becomes dull`() {
-        val initialPointDurability = 3
+        val initialPointDurability = 4
         val pencil = Pencil(initialPointDurability)
         val paper = Paper()
         pencil.write(paper, "Howdy!")
         assertEquals("How   ", paper.read())
+    }
+
+    @Test
+    fun `uppercase letters reduce visibility by 2`() {
+        val initialPointDurability = 10
+        val pencil = Pencil(initialPointDurability)
+        val paper = Paper()
+        pencil.write(paper, "\nA\n")
+        assertEquals(initialPointDurability - 2, pencil.pointDurability)
     }
 }

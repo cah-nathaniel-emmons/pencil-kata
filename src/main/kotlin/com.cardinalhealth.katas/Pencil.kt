@@ -14,20 +14,22 @@ class Pencil(
     private val freeCharacters = listOf(' ', '\n')
 
     fun write(paper: Paper, characters: String) {
-        val pointDurabilityCost = characters.filter { !freeCharacters.contains(it) }.length
+        val pointDurabilityCost = characters.sumOf { charPointDurabilityCost(it) }
 
         if (pointDurability < pointDurabilityCost) {
             var spent = 0
             var writeableCharacters = ""
 
             characters.forEach { char ->
+                val cost = charPointDurabilityCost(char)
+
                 if (freeCharacters.contains(char)) {
                     writeableCharacters += char
-                } else if (spent == pointDurability) {
-                    writeableCharacters += " "
-                } else {
+                } else if (spent + cost <= pointDurability) {
                     writeableCharacters += char
-                    spent++
+                    spent += cost
+                } else {
+                    writeableCharacters += " "
                 }
             }
             pointDurability = 0
@@ -36,5 +38,14 @@ class Pencil(
             pointDurability -= pointDurabilityCost
             paper.write(characters)
         }
+    }
+
+    private fun charPointDurabilityCost(character: Char): Int {
+        if (freeCharacters.contains(character)) {
+            return 0
+        } else if (character.isUpperCase()) {
+            return 2
+        }
+        return 1
     }
 }
