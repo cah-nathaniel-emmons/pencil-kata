@@ -16,12 +16,15 @@ class Paper(private var contents: String = "") {
 
 class Pencil(
     private val initialPointDurability: Int = 10000,
-    private val initialLength: Int = 8
+    initialLength: Int = 8,
+    initialEraserDurability: Int = 200
 ) {
     private val freeCharacters = listOf(' ', '\n')
 
+    //TODO remove public setters
     var pointDurability = initialPointDurability
     var length = initialLength
+    var eraserDurability = initialEraserDurability
 
     fun write(paper: Paper, characters: String) {
         val pointDurabilityCost = characters.sumOf { charPointDurabilityCost(it) }
@@ -52,6 +55,7 @@ class Pencil(
 
     fun erase(paper: Paper, characters: String): Pencil {
         paper.erase(characters)
+        eraserDurability -= characters.length
         return this
     }
 

@@ -160,6 +160,13 @@ class PencilTest {
         assertEquals("How much wood would a woodchuck chuck if a     chuck could chuck     ?", paper.read())
     }
 
-
-
+    @Test
+    fun `erasing degrades eraser durability`() {
+        val initialEraserDurability = 5
+        val pencil = Pencil(initialEraserDurability = initialEraserDurability)
+        val paper = Paper()
+        pencil.write(paper, "Fish Sticks")
+        pencil.erase(paper, "Fish")
+        assertEquals(1, pencil.eraserDurability)
+    }
 }
