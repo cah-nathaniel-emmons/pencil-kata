@@ -119,4 +119,47 @@ class PencilTest {
         assertEquals(0, pencil.pointDurability)
         assertEquals(0, pencil.length)
     }
+
+    @Test
+    fun `text can be erased`() {
+        val pencil = Pencil()
+        val paper = Paper()
+        pencil.write(paper, "Erase Me Please")
+        pencil.erase(paper, "Erase Me")
+        assertEquals("         Please", paper.read())
+    }
+
+    @Test
+    fun `more text can be erased`() {
+        val pencil = Pencil()
+        val paper = Paper()
+        pencil.write(paper, "ABCDEFG")
+        pencil.erase(paper, "B")
+            .erase(paper, "D")
+            .erase(paper, "F")
+        assertEquals("A C E G", paper.read())
+    }
+
+    @Test
+    fun `it erases the last occurrence of a string`() {
+        val pencil = Pencil()
+        val paper = Paper()
+        pencil.write(paper, "badger badger badger mushroom mushroom")
+        pencil.erase(paper, "mushroom")
+            .erase(paper, "badger")
+        assertEquals("badger badger        mushroom         ", paper.read())
+    }
+
+    @Test
+    fun `it continues to search earlier for an occurrence if erasing the same string repeatedly`() {
+        val pencil = Pencil()
+        val paper = Paper()
+        pencil.write(paper, "How much wood would a woodchuck chuck if a woodchuck could chuck wood?")
+        pencil.erase(paper, "wood")
+            .erase(paper, "wood")
+        assertEquals("How much wood would a woodchuck chuck if a     chuck could chuck     ?", paper.read())
+    }
+
+
+
 }

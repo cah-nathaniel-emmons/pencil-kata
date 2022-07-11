@@ -6,6 +6,12 @@ class Paper(private var contents: String = "") {
     fun write(characters: String) {
         contents += characters
     }
+
+    fun erase(characters: String) {
+        contents.findLastAnyOf(listOf(characters))?.let { (pos, _) ->
+            contents = contents.replaceRange(pos, pos + characters.length, " ".repeat(characters.length))
+        }
+    }
 }
 
 class Pencil(
@@ -42,6 +48,11 @@ class Pencil(
             pointDurability -= pointDurabilityCost
             paper.write(characters)
         }
+    }
+
+    fun erase(paper: Paper, characters: String): Pencil {
+        paper.erase(characters)
+        return this
     }
 
     fun sharpen() {
