@@ -37,7 +37,7 @@ class PencilTest {
     @Test
     fun `writing with a pencil decreases its durability`() {
         val initialPointDurability = 10
-        val pencil = Pencil(10)
+        val pencil = Pencil(initialPointDurability)
         val paper = Paper()
         pencil.write(paper, "A")
         assertEquals(initialPointDurability - 1, pencil.pointDurability)
@@ -46,7 +46,7 @@ class PencilTest {
     @Test
     fun `writing spaces does not reduce durability`() {
         val initialPointDurability = 10
-        val pencil = Pencil(10)
+        val pencil = Pencil(initialPointDurability)
         val paper = Paper()
         pencil.write(paper, "     A         ")
         assertEquals(initialPointDurability - 1, pencil.pointDurability)
@@ -55,9 +55,27 @@ class PencilTest {
     @Test
     fun `writing newlines does not reduce durability`() {
         val initialPointDurability = 10
-        val pencil = Pencil(10)
+        val pencil = Pencil(initialPointDurability)
         val paper = Paper()
         pencil.write(paper, "\nA\n")
         assertEquals(initialPointDurability - 1, pencil.pointDurability)
+    }
+
+    @Test
+    fun `writing with a dull pencil produces spaces`() {
+        val initialPointDurability = 0
+        val pencil = Pencil(initialPointDurability)
+        val paper = Paper()
+        pencil.write(paper, "Is this thing on?")
+        assertEquals("                 ", paper.read())
+    }
+
+    @Test
+    fun `spaces appear immediately after a pencil becomes dull`() {
+        val initialPointDurability = 3
+        val pencil = Pencil(initialPointDurability)
+        val paper = Paper()
+        pencil.write(paper, "Howdy!")
+        assertEquals("How   ", paper.read())
     }
 }
