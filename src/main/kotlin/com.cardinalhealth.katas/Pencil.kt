@@ -12,7 +12,7 @@ class Pencil(
     var pointDurability: Int = 10000
 ) {
     fun write(paper: Paper, characters: String) {
-        pointDurability -= characters.length
+        pointDurability -= characters.filter { it != ' ' }.length
         paper.write(characters)
     }
 }
