@@ -33,4 +33,13 @@ class PencilTest {
         pencil.write(paper, " down by the sea shore")
         assertEquals("She sells sea shells down by the sea shore", paper.read())
     }
+
+    @Test
+    fun `writing with a pencil decreases its durability`() {
+        val initialPointDurability = 10
+        val pencil = Pencil(10)
+        val paper = Paper()
+        pencil.write(paper, "A")
+        assertEquals(initialPointDurability - 1, pencil.pointDurability)
+    }
 }

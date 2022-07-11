@@ -8,8 +8,11 @@ class Paper(private var contents: String = "") {
     }
 }
 
-class Pencil() {
+class Pencil(
+    var pointDurability: Int = 10000
+) {
     fun write(paper: Paper, characters: String) {
+        pointDurability -= characters.length
         paper.write(characters)
     }
 }
