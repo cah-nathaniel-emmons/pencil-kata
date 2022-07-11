@@ -169,4 +169,15 @@ class PencilTest {
         pencil.erase(paper, "Fish")
         assertEquals(1, pencil.eraserDurability)
     }
+
+    @Test
+    fun `it cannot erase when the eraser has no remaining durability`() {
+        val initialEraserDurability = 3
+        val pencil = Pencil(initialEraserDurability = initialEraserDurability)
+        val paper = Paper()
+        pencil.write(paper, "Fish Sticks")
+        pencil.erase(paper, "Fish Sticks")
+        assertEquals(0, pencil.eraserDurability)
+        assertEquals("Fish Sti   ", paper.read())
+    }
 }

@@ -1,5 +1,7 @@
 package com.cardinalhealth.katas
 
+import java.lang.Integer.min
+
 class Paper(private var contents: String = "") {
     fun read() = contents
 
@@ -7,9 +9,11 @@ class Paper(private var contents: String = "") {
         contents += characters
     }
 
-    fun erase(characters: String) {
+    fun erase(characters: String, eraseLength: Int) {
         contents.findLastAnyOf(listOf(characters))?.let { (pos, _) ->
-            contents = contents.replaceRange(pos, pos + characters.length, " ".repeat(characters.length))
+            val end = pos + characters.length
+            val start = end - eraseLength
+            contents = contents.replaceRange(start, end, " ".repeat(eraseLength))
         }
     }
 }
@@ -54,8 +58,9 @@ class Pencil(
     }
 
     fun erase(paper: Paper, characters: String): Pencil {
-        paper.erase(characters)
-        eraserDurability -= characters.length
+        val eraseLength = min(eraserDurability, characters.length)
+        paper.erase(characters, eraseLength)
+        eraserDurability -= eraseLength
         return this
     }
 
