@@ -9,9 +9,11 @@ class Paper(private var contents: String = "") {
 }
 
 class Pencil(
-    var pointDurability: Int = 10000
+    private val initialPointDurability: Int = 10000
 ) {
     private val freeCharacters = listOf(' ', '\n')
+
+    var pointDurability = initialPointDurability
 
     fun write(paper: Paper, characters: String) {
         val pointDurabilityCost = characters.sumOf { charPointDurabilityCost(it) }
@@ -38,6 +40,10 @@ class Pencil(
             pointDurability -= pointDurabilityCost
             paper.write(characters)
         }
+    }
+
+    fun sharpen() {
+        pointDurability = initialPointDurability
     }
 
     private fun charPointDurabilityCost(character: Char): Int {

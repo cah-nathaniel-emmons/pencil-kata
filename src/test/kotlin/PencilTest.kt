@@ -87,4 +87,15 @@ class PencilTest {
         pencil.write(paper, "\nA\n")
         assertEquals(initialPointDurability - 2, pencil.pointDurability)
     }
+
+    @Test
+    fun `sharpening a pencil resets its durability`() {
+        val initialPointDurability = 4
+        val pencil = Pencil(initialPointDurability)
+        val paper = Paper()
+        pencil.write(paper, "Woot")
+        assertEquals(0, pencil.pointDurability)
+        pencil.sharpen()
+        assertEquals(initialPointDurability, pencil.pointDurability)
+    }
 }
