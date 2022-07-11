@@ -51,4 +51,13 @@ class PencilTest {
         pencil.write(paper, "     A         ")
         assertEquals(initialPointDurability - 1, pencil.pointDurability)
     }
+
+    @Test
+    fun `writing newlines does not reduce durability`() {
+        val initialPointDurability = 10
+        val pencil = Pencil(10)
+        val paper = Paper()
+        pencil.write(paper, "\nA\n")
+        assertEquals(initialPointDurability - 1, pencil.pointDurability)
+    }
 }

@@ -11,8 +11,10 @@ class Paper(private var contents: String = "") {
 class Pencil(
     var pointDurability: Int = 10000
 ) {
+    private val freeCharacters = listOf(' ', '\n')
+
     fun write(paper: Paper, characters: String) {
-        pointDurability -= characters.filter { it != ' ' }.length
+        pointDurability -= characters.filter { !freeCharacters.contains(it) }.length
         paper.write(characters)
     }
 }
