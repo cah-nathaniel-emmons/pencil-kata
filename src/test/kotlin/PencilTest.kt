@@ -37,7 +37,7 @@ class PencilTest {
     @Test
     fun `writing with a pencil decreases its durability`() {
         val initialPointDurability = 10
-        val pencil = Pencil(10)
+        val pencil = Pencil(initialPointDurability)
         val paper = Paper()
         pencil.write(paper, "a")
         //This is pretty subjective but I _think_ it's better to give the hardcoded numbers in both places. This is less DRY, which can be bad in tests since you can make the same math mistake in your code and in your tests and not realize it
