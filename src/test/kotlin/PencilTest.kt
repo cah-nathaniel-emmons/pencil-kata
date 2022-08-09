@@ -8,13 +8,13 @@ class PencilTest {
     @Test
     fun `we can read a blank piece of paper`() {
         val paper = Paper()
-        assertEquals("", paper.read())
+        assertEquals("", paper.contents)
     }
 
     @Test
     fun `we can read a piece of paper that has text on it`() {
         val paper = Paper("Hello World")
-        assertEquals("Hello World", paper.read())
+        assertEquals("Hello World", paper.contents)
     }
 
     @Test
@@ -22,7 +22,7 @@ class PencilTest {
         val pencil = Pencil()
         val paper = Paper()
         pencil.write(paper, "Hello!")
-        assertEquals("Hello!", paper.read())
+        assertEquals("Hello!", paper.contents)
     }
 
     @Test
@@ -31,7 +31,7 @@ class PencilTest {
         val paper = Paper()
         pencil.write(paper, "She sells sea shells")
         pencil.write(paper, " down by the sea shore")
-        assertEquals("She sells sea shells down by the sea shore", paper.read())
+        assertEquals("She sells sea shells down by the sea shore", paper.contents)
     }
 
     @Test
@@ -40,7 +40,8 @@ class PencilTest {
         val pencil = Pencil(initialPointDurability)
         val paper = Paper()
         pencil.write(paper, "a")
-        assertEquals(initialPointDurability - 1, pencil.pointDurability)
+        //This is pretty subjective but I _think_ it's better to give the hardcoded numbers in both places. This is less DRY, which can be bad in tests since you can make the same math mistake in your code and in your tests and not realize it
+        assertEquals(9, pencil.pointDurability)
     }
 
     @Test
@@ -67,7 +68,7 @@ class PencilTest {
         val pencil = Pencil(initialPointDurability)
         val paper = Paper()
         pencil.write(paper, "is this thing on?")
-        assertEquals("                 ", paper.read())
+        assertEquals("                 ", paper.contents)
     }
 
     @Test
@@ -76,7 +77,7 @@ class PencilTest {
         val pencil = Pencil(initialPointDurability)
         val paper = Paper()
         pencil.write(paper, "Howdy!")
-        assertEquals("How   ", paper.read())
+        assertEquals("How   ", paper.contents)
     }
 
     @Test
@@ -126,38 +127,42 @@ class PencilTest {
         val paper = Paper()
         pencil.write(paper, "Erase Me Please")
         pencil.erase(paper, "Erase Me")
-        assertEquals("         Please", paper.read())
+        assertEquals("         Please", paper.contents)
     }
 
     @Test
     fun `more text can be erased`() {
-        val pencil = Pencil()
         val paper = Paper()
-        pencil.write(paper, "ABCDEFG")
-        pencil.erase(paper, "B")
-            .erase(paper, "D")
-            .erase(paper, "F")
-        assertEquals("A C E G", paper.read())
+        //This gives you the same chaining you had with erase returning the pencil, but in a more ideomatic way
+        with(Pencil()) {
+            write(paper, "ABCDEFG")
+            erase(paper, "B")
+            erase(paper, "D")
+            erase(paper, "F")
+        }
+        assertEquals("A C E G", paper.contents)
     }
 
     @Test
     fun `it erases the last occurrence of a string`() {
-        val pencil = Pencil()
         val paper = Paper()
-        pencil.write(paper, "badger badger badger mushroom mushroom")
-        pencil.erase(paper, "mushroom")
-            .erase(paper, "badger")
-        assertEquals("badger badger        mushroom         ", paper.read())
+        with(Pencil()) {
+            write(paper, "badger badger badger mushroom mushroom")
+            erase(paper, "mushroom")
+            erase(paper, "badger")
+        }
+        assertEquals("badger badger        mushroom         ", paper.contents)
     }
 
     @Test
     fun `it continues to search earlier for an occurrence if erasing the same string repeatedly`() {
-        val pencil = Pencil()
         val paper = Paper()
-        pencil.write(paper, "How much wood would a woodchuck chuck if a woodchuck could chuck wood?")
-        pencil.erase(paper, "wood")
-            .erase(paper, "wood")
-        assertEquals("How much wood would a woodchuck chuck if a     chuck could chuck     ?", paper.read())
+        with(Pencil()) {
+            write(paper, "How much wood would a woodchuck chuck if a woodchuck could chuck wood?")
+            erase(paper, "wood")
+            erase(paper, "wood")
+        }
+        assertEquals("How much wood would a woodchuck chuck if a     chuck could chuck     ?", paper.contents)
     }
 
     @Test
@@ -178,6 +183,6 @@ class PencilTest {
         pencil.write(paper, "Fish Sticks")
         pencil.erase(paper, "Fish Sticks")
         assertEquals(0, pencil.eraserDurability)
-        assertEquals("Fish Sti   ", paper.read())
+        assertEquals("Fish Sti   ", paper.contents)
     }
 }
