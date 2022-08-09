@@ -18,6 +18,7 @@ class Pencil(
     var eraserDurability = initialEraserDurability
         private set
 
+    //I think there are a bunch of ways you can do this, and I think your version is easily parsable/readable
     fun write(paper: Paper, characters: String) {
         val pointDurabilityCost = characters.sumOf { charPointDurabilityCost(it) }
 
@@ -40,6 +41,7 @@ class Pencil(
             pointDurability = 0
             paper.write(writeableCharacters)
         } else {
+            //I did this too and I think it makes sense / is optimal, but you technically don't need it if you change the above pointDurability = 0 to `pointDurability -= spent`. I think this else is nice though to call out this specific case.
             pointDurability -= pointDurabilityCost
             paper.write(characters)
         }
