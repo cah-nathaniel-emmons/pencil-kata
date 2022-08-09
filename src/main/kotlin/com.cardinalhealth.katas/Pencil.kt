@@ -1,34 +1,22 @@
 package com.cardinalhealth.katas
 
-import java.lang.Integer.min
+import kotlin.math.min
 
-class Paper(private var contents: String = "") {
-    fun read() = contents
-
-    fun write(characters: String) {
-        contents += characters
-    }
-
-    fun erase(characters: String, eraseLength: Int) {
-        contents.findLastAnyOf(listOf(characters))?.let { (pos, _) ->
-            val end = pos + characters.length
-            val start = end - eraseLength
-            contents = contents.replaceRange(start, end, " ".repeat(eraseLength))
-        }
-    }
-}
-
+//I appreciate the constructor defaults
 class Pencil(
     private val initialPointDurability: Int = 10000,
     initialLength: Int = 8,
     initialEraserDurability: Int = 200
 ) {
-    private val freeCharacters = listOf(' ', '\n')
+    //Personally I think I like a trim or isBlank or something, but I think that's just cause I like the abstraction. I think this is just as valid and maybe performs better?
+    private val freeCharacters = setOf(' ', '\n')
 
-    //TODO remove public setters
     var pointDurability = initialPointDurability
+        private set
     var length = initialLength
+        private set
     var eraserDurability = initialEraserDurability
+        private set
 
     fun write(paper: Paper, characters: String) {
         val pointDurabilityCost = characters.sumOf { charPointDurabilityCost(it) }
@@ -57,11 +45,11 @@ class Pencil(
         }
     }
 
-    fun erase(paper: Paper, characters: String): Pencil {
+    //I don't think it makes sense for this to return a pencil
+    fun erase(paper: Paper, characters: String) {
         val eraseLength = min(eraserDurability, characters.length)
         paper.erase(characters, eraseLength)
         eraserDurability -= eraseLength
-        return this
     }
 
     fun sharpen() {
@@ -71,12 +59,9 @@ class Pencil(
         }
     }
 
-    private fun charPointDurabilityCost(character: Char): Int {
-        if (freeCharacters.contains(character)) {
-            return 0
-        } else if (character.isUpperCase()) {
-            return 2
-        }
-        return 1
+    private fun charPointDurabilityCost(character: Char) = when {
+        freeCharacters.contains(character) -> 0
+        character.isUpperCase() -> 2
+        else -> 1
     }
 }
